@@ -1,16 +1,18 @@
 <template>
    
-<flowchart></flowchart> 
+<!-- <flowchart></flowchart>  -->
+<opt21></opt21>
 </template>
 
 <script>
-import Project from './components/Project';
+// import Project from './components/Project';
+import opt21 from './components/Opt21'
 
 export default {
   name: 'App',
   components: {
-  'flowchart': Project,
-    
+  //'flowchart': Project,
+    opt21
   }
 }
 </script>

@@ -8,13 +8,13 @@
                 <div   class="chart-item" :class="start.shape" :data-key="start.shape">{{start.label}}</div>
             </div>
             <div  class="item"  :key="callAction.label">
-                <div   class="chart-item1" :class="callAction.shape" :data-key="callAction.shape">{{callAction.label}}</div>
+                <div   class="chart-item" :class="callAction.shape" :data-key="callAction.shape">{{callAction.label}}</div>
             </div>
             <div  class="item"  :key="playSoundAction.label">
-                <div   class="chart-item2" :class="playSoundAction.shape" :data-key="playSoundAction.shape">{{playSoundAction.label}}</div>
+                <div   class="chart-item" :class="playSoundAction.shape" :data-key="playSoundAction.shape">{{playSoundAction.label}}</div>
             </div>
             <div  class="item"  :key="callInputAction.label">
-                <div  class="chart-item3" :class="callInputAction.shape" :data-key="callInputAction.shape">{{callInputAction.label}}</div>
+                <div  class="chart-item" :class="callInputAction.shape" :data-key="callInputAction.shape">{{callInputAction.label}}</div>
             </div>
             </div>
         </div>
@@ -58,7 +58,7 @@ export default {
           [
             "Label",
               {
-                label: "FOO",
+                label: "Connect",
                 location: 0.2,
                 id: "Label",
                 cssClass: "arrow-label",
@@ -381,41 +381,31 @@ export default {
           ]
         ]
       };
+
+       let targetPoint2 = {
+       endpoint: "Dot",
+        paintStyle: { fill: "#7AB02C", radius: 7 },
+        hoverPaintStyle: endpointHoverStyle,
+        maxConnections: -1,
+        dropOptions: { hoverClass: "hover", activeClass: "active" },
+        isTarget: true,
+        overlays: [
+          [
+            "Label",
+            {
+              location: [0.5, -0.5],
+              label: "Drop",
+              cssClass: "endpointTargetLabel",
+              visible: false
+            }
+          ]
+        ]
+      };
       let init = function(connection) {
           console.log(connection);
           connection.getOverlay("label").setLabel("123");
       };
-      let addEndpoints = function(toId, sourceAnchors, sourceAnchors1, sourceAnchors2) {
-        console.log(toId, sourceAnchors);
-       // for (var i = 0; i < sourceAnchors.length; i++) {
-          var sourceUUID = toId + sourceAnchors;
-          instance.addEndpoint(toId, sourceEndpoint, {
-            anchor: sourceAnchors,
-            uuid: sourceUUID
-          });
-
-           var sourceUUID1 = toId+ sourceAnchors1;
-          instance.addEndpoint(toId, sourceEndpoint1, {
-            anchor: sourceAnchors1,
-            uuid: sourceUUID1
-          });
-
-           var sourceUUID2 = toId + sourceAnchors2;
-          instance.addEndpoint(toId, sourceEndpoint2, {
-            anchor: sourceAnchors2,
-            uuid: sourceUUID2
-          });
-       // }
-        // for (var j = 0; j < targetAnchors.length; j++) {
-        //   var targetUUID = toId + targetAnchors[j];
-        //   start.addEndpoint(toId, targetEndpoint, {
-        //     anchor: targetAnchors[j],
-        //     // anchor: 'Continuous',
-        //     uuid: targetUUID
-        //   });
-        // }
-      };
-
+     
        let addEndpoints1 = function(toId, sourceAnchors, sourceAnchors1, sourceAnchors2, sourceAnchors3, targetAnchor) {
         console.log(toId, sourceAnchors);
           var sourceUUID3 = toId + sourceAnchors;
@@ -445,6 +435,15 @@ export default {
           var targetUUID = toId + targetAnchor;
           instance.addEndpoint(toId, targetPoint, {
             anchor: targetAnchor,
+            uuid: targetUUID
+          });
+      };
+
+       let addEndpoints2 = function(toId, targetAnchors) {
+        console.log(toId, targetAnchors);
+          var targetUUID = toId + targetAnchors;
+          instance.addEndpoint(toId, targetPoint2, {
+            anchor: targetAnchors,
             uuid: targetUUID
           });
       };
@@ -493,23 +492,27 @@ export default {
           containment: $("#work-container")
       });
 
-       $(".box-card .chart-item1").draggable({
-          scope: "plant",
-          helper: "clone",
-          containment: $("#work-container")
-      });
+    //    $(".box-card .chart-item1").draggable({
+    //       scope: "plant",
+    //       helper: "clone",
+    //       containment: $("#work-container")
+    //   });
       $("#workplace").droppable({
           scope: "plant",
           drop: function(ev, ui) {
             console.log(ev, ui, ui.draggable[0].classList);
-            
-            let callNumber = '01251421412';
-            let cla = "addaction";
+            var text = ui.helper[0].childNodes[0].data;
+            console.log(text)
+          if (text) {
+              switch (text){
+              case 'Start':
+                  let startPhrase = "PHILO excution will start from this page";
+            let cla = "start";
             let id = "item" + new Date().getTime();
             let html = `<div id="${id}" class="chart-item  ${ui.helper.attr(
               "data-key"
-          )}"><div class="${cla}" ><ul><li>Add Action</li></ul></div>Call ${callNumber}<hr></div>`;
-          
+          )}"><div class="${cla}" ><ul><li>Start</li></ul></div>${startPhrase}<hr></div>`;
+          $(this).append(html);
           $("#" + id).css({
               width: 300 + "px",
               height: 90 + "px",
@@ -521,17 +524,61 @@ export default {
           $("." + cla).css({
               border: 1 + 'px' + ' solid' + ' red', 
               textAlign: 'left',
-              paddingLeft: 15 + "px",
-              color: 'blue',
+              paddingLeft: 15 + "px"
           });
-         
 
-           let startPhrase = "PHILO excution will start from this page";
-            let cla1 = "start";
+           let addEndpoints = function(toId, sourceAnchors, sourceAnchors1, sourceAnchors2) {
+        console.log(toId, sourceAnchors);
+       // for (var i = 0; i < sourceAnchors.length; i++) {
+          var sourceUUID = toId + sourceAnchors;
+          instance.addEndpoint(toId, sourceEndpoint, {
+            anchor: sourceAnchors,
+            uuid: sourceUUID
+          });
+
+           var sourceUUID1 = toId+ sourceAnchors1;
+          instance.addEndpoint(toId, sourceEndpoint1, {
+            anchor: sourceAnchors1,
+            uuid: sourceUUID1
+          });
+
+           var sourceUUID2 = toId + sourceAnchors2;
+          instance.addEndpoint(toId, sourceEndpoint2, {
+            anchor: sourceAnchors2,
+            uuid: sourceUUID2
+          });
+       // }
+        // for (var j = 0; j < targetAnchors.length; j++) {
+        //   var targetUUID = toId + targetAnchors[j];
+        //   start.addEndpoint(toId, targetEndpoint, {
+        //     anchor: targetAnchors[j],
+        //     // anchor: 'Continuous',
+        //     uuid: targetUUID
+        //   });
+        // }
+      };
+
+          addEndpoints(
+              id,
+              "BottomLeft",
+              "BottomCenter",
+              "BottomRight"
+          );
+
+          
+          instance.draggable(id, {
+              grid: [1, 1],
+               //containment: true
+          });
+          
+          break; 
+          case "Call Action":
+           let callNumber = '01251421412';
+            let clas = "addaction";
             let id1 = "item" + new Date().getTime();
-            let html1 = `<div id="${id1}" class="chart-item1  ${ui.helper.attr(
+            let html1 = `<div id="${id1}" class="chart-item  ${ui.helper.attr(
               "data-key"
-          )}"><div class="${cla1}" ><ul><li>Start</li></ul></div>${startPhrase}<hr></div>`;
+          )}"><div class="${clas}" ><ul><li>Add Action</li></ul></div>Call ${callNumber}<hr></div>`;
           $(this).append(html1);
           $("#" + id1).css({
               width: 300 + "px",
@@ -541,19 +588,13 @@ export default {
               background: 'white',
               border: 1 + 'px' + ' solid' + ' red',
           });
-          $("." + cla1).css({
+          $("." + clas).css({
               border: 1 + 'px' + ' solid' + ' red', 
               textAlign: 'left',
-              paddingLeft: 15 + "px"
+              paddingLeft: 15 + "px",
+              color: 'blue',
           });
-          addEndpoints(
-              id,
-              "BottomLeft",
-              "BottomCenter",
-              "BottomRight"
-          );
-
-           addEndpoints1(
+          addEndpoints1(
               id1,
               "BottomLeft",
               [ .4, 1, 0, 1 ],
@@ -561,11 +602,116 @@ export default {
               "BottomRight",
               "TopCenter"
           );
+
           
-          instance.draggable(id, id1,{
+          instance.draggable(id1, {
               grid: [1, 1]
               // containment: true
           });
+          break;
+          case "Play Sound Action" :
+               let url = "https://glocum.com";
+            let clas1 = "start";
+            let id2 = "item" + new Date().getTime();
+            let html2 = `<div id="${id2}" class="chart-item  ${ui.helper.attr(
+              "data-key"
+          )}"><div class="${clas1}" ><ul><li>Play Sound Action</li></ul></div>${url}<hr></div>`;
+          $(this).append(html2);
+          $("#" + id2).css({
+              width: 300 + "px",
+              height: 90 + "px",
+              top: ui.position.top -20 + "px",
+              left: ui.position.left - 460 + "px",
+              background: 'white',
+              border: 1 + 'px' + ' solid' + ' red',
+          });
+          $("." + clas1).css({
+              border: 1 + 'px' + ' solid' + ' red', 
+              textAlign: 'left',
+              paddingLeft: 15 + "px"
+          });
+          addEndpoints2(
+              id2,
+              "TopCenter"
+          );
+          instance.draggable(id2,{
+              grid: [1, 1]
+              // containment: true
+          });
+          break;
+
+          case "Call Input Action" :
+            let userInput = 'Get User Input and evaluate if input is either 1, 2';
+            let cla3 = "callInputAction";
+            let id3 = "item" + new Date().getTime();
+            let html3 = `<div id="${id3}" class="chart-item  ${ui.helper.attr(
+              "data-key"
+          )}"><div class="${cla3}" ><ul><li>Call Input Action</li></ul></div>${userInput}<hr></div>`;
+          $(this).append(html3);
+          $("#" + id3).css({
+              width: 300 + "px",
+              height: 90 + "px",
+              top: ui.position.top -20 + "px",
+              left: ui.position.left - 460 + "px",
+              background: 'white',
+              border: 1 + 'px' + ' solid' + ' red',
+          });
+          $("." + cla3).css({
+              border: 1 + 'px' + ' solid' + ' red', 
+              textAlign: 'left',
+              paddingLeft: 15 + "px",
+              color: 'blue',
+          });
+
+          let addEndpoints3 = function(toId, sourceAnchors, sourceAnchors1, sourceAnchors2, sourceAnchors3, targetAnchor) {
+        console.log(toId, sourceAnchors);
+          var sourceUUID = toId + sourceAnchors;
+          instance.addEndpoint(toId, on_answer, {
+            anchor: sourceAnchors,
+            uuid: sourceUUID
+          });
+
+           var sourceUUID1 = toId+ sourceAnchors1;
+          instance.addEndpoint(toId, no_answer, {
+            anchor: sourceAnchors1,
+            uuid: sourceUUID1
+          });
+
+           var sourceUUID2 = toId + sourceAnchors2;
+          instance.addEndpoint(toId, busy, {
+            anchor: sourceAnchors2,
+            uuid: sourceUUID2
+          });
+
+          var sourceUUID3 = toId + sourceAnchors3;
+          instance.addEndpoint(toId, failed, {
+            anchor: sourceAnchors3,
+            uuid: sourceUUID3
+          });
+
+          var targetUUID = toId + targetAnchor;
+          instance.addEndpoint(toId, targetPoint, {
+            anchor: targetAnchor,
+            uuid: targetUUID
+          });
+      };
+          addEndpoints3(
+              id3,
+              "BottomLeft",
+              [ .4, 1, 0, 1 ],
+              [ .7, 1, 0, 1 ],
+              "BottomRight",
+              "TopCenter"
+          );
+
+          
+          instance.draggable(id3, {
+              grid: [1, 1]
+              // containment: true
+          });
+            break;
+              } 
+          }
         }
       });
 
